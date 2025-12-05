@@ -1,7 +1,8 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "weight-gain-app",
+  "version": "1.0.1",
   "private": true,
+  "description": "Weight Gain Tracker PWA - Track your weight gain journey",
   "scripts": {
     "build": "next build",
     "dev": "next dev -H 0.0.0.0",
