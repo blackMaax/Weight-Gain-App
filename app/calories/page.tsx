@@ -206,38 +206,52 @@ export default function CaloriesPage() {
   }
 
   const handleAddAnalyzedMeal = () => {
-    if (!analyzedMeal) return
-
-    const totalCalories = Math.round(analyzedMeal.calories * photoQuantity)
-    const now = new Date()
-
-    const newEntry = {
-      id: Date.now(),
-      foodName: "Meal",
-      calories: totalCalories,
-      icon: analyzedMeal.icon,
-      category: analyzedMeal.category,
-      quantity: photoQuantity,
-      unit: "meal",
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      timestamp: now.getTime(),
-      photoUrl: photoPreview,
+    if (!analyzedMeal) {
+      console.error("No analyzed meal to add")
+      return
     }
 
-    const updated = [...allLogs, newEntry]
-    setAllLogs(updated)
-    saveCalorieEntries(updated)
+    try {
+      const totalCalories = Math.round((analyzedMeal.calories || editedCalories || 0) * photoQuantity)
+      if (totalCalories <= 0) {
+        alert("Please enter a valid calorie amount")
+        return
+      }
 
-    const todayEntries = updated.filter((e: any) => e.date === new Date().toLocaleDateString())
-    setTodayLog(todayEntries)
+      const now = new Date()
 
-    // Check achievements
-    checkAchievements()
+      const newEntry = {
+        id: Date.now(),
+        foodName: "Meal",
+        calories: totalCalories,
+        icon: analyzedMeal.icon || '🍽️',
+        category: analyzedMeal.category || "Photo Analysis",
+        quantity: photoQuantity,
+        unit: "meal",
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: now.getTime(),
+        photoUrl: photoPreview,
+      }
 
-    setPhotoModalOpen(false)
-    setPhotoPreview(null)
-    setAnalyzedMeal(null)
+      const updated = [...allLogs, newEntry]
+      setAllLogs(updated)
+      saveCalorieEntries(updated)
+
+      const todayEntries = updated.filter((e: any) => e.date === new Date().toLocaleDateString())
+      setTodayLog(todayEntries)
+
+      // Check achievements
+      checkAchievements()
+
+      setPhotoModalOpen(false)
+      setPhotoPreview(null)
+      setAnalyzedMeal(null)
+      setEditedCalories(0)
+    } catch (error) {
+      console.error("Error adding meal:", error)
+      alert("Failed to add meal. Please try again.")
+    }
   }
 
   const totalCaloriesToday = todayLog.reduce((sum, entry) => sum + entry.calories, 0)
@@ -606,9 +620,10 @@ export default function CaloriesPage() {
                     <label className="text-sm text-[#003049] font-semibold">Adjust Calories</label>
                     <input
                       type="number"
-                      value={analyzedMeal.calories}
+                      value={editedCalories || analyzedMeal.calories || 0}
                       onChange={(e) => {
-                        const newCalories = parseInt(e.target.value) || analyzedMeal.calories
+                        const newCalories = parseInt(e.target.value) || 0
+                        setEditedCalories(newCalories)
                         setAnalyzedMeal({ ...analyzedMeal, calories: newCalories })
                       }}
                       className="w-full px-4 py-3 bg-white border-2 border-[#E0E0E0] text-[#003049] font-bold text-xl text-center rounded-xl focus:border-[#C1121F] focus:outline-none shadow-sm"
@@ -621,7 +636,7 @@ export default function CaloriesPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-[#003049]">Servings: {photoQuantity}</span>
                       <span className="text-sm text-[#669BBC] font-medium">
-                        {photoQuantity} x {analyzedMeal.calories} kcal
+                        {photoQuantity} x {editedCalories || analyzedMeal.calories || 0} kcal
                       </span>
                     </div>
                     <Slider
@@ -649,8 +664,18 @@ export default function CaloriesPage() {
                       Cancel
                     </Button>
                     <Button 
-                      onClick={handleAddAnalyzedMeal} 
-                      className="flex-1 bg-[#C1121F] hover:bg-[#780000] text-white rounded-xl font-semibold shadow-md hover:shadow-lg"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleAddAnalyzedMeal()
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleAddAnalyzedMeal()
+                      }}
+                      disabled={!analyzedMeal || (analyzedMeal.calories || editedCalories || 0) <= 0}
+                      className="flex-1 bg-[#C1121F] hover:bg-[#780000] active:bg-[#780000] text-white rounded-xl font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
                     >
                       Add to Log
                     </Button>
