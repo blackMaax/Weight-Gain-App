@@ -9,9 +9,11 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    const userData = localStorage.getItem("user")
-    if (userData) {
-      router.push("/dashboard")
+    if (typeof window !== 'undefined') {
+      const userData = localStorage.getItem("user")
+      if (userData) {
+        router.push("/dashboard")
+      }
     }
   }, [router])
 
@@ -21,6 +23,7 @@ export default function Home() {
         <div className="text-center space-y-8 max-w-2xl">
           <div className="space-y-4">
             <h1 className="text-6xl font-black text-white uppercase tracking-tighter">Gain with Purpose</h1>
+            {/* Updated for Vercel deployment */}
             <p className="text-xl text-gray-400 font-semibold uppercase tracking-wider">
               Track your weight gain journey with gamified goals, community support, and expert guidance
             </p>

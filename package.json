@@ -1,6 +1,6 @@
 {
   "name": "weight-gain-app",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Weight Gain Tracker PWA - Track your weight gain journey",
   "scripts": {
