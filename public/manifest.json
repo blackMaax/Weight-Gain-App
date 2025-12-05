@@ -1,0 +1,56 @@
+{
+  "name": "Gain with Purpose - Weight Gain Tracker",
+  "short_name": "Gain Tracker",
+  "description": "Track your weight gain journey with gamified goals, expert guidance, and community support",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDF0D5",
+  "theme_color": "#DC2626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "fitness", "lifestyle"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your progress dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Log Weight",
+      "short_name": "Weight",
+      "description": "Log your weight",
+      "url": "/weight-tracking",
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Log Calories",
+      "short_name": "Calories",
+      "description": "Log your calories",
+      "url": "/calories",
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "32x32" }]
+    }
+  ]
+}
+
